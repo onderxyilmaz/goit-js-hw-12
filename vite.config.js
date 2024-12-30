@@ -4,30 +4,17 @@ import { glob } from 'glob';
 import injectHTML from 'vite-plugin-html-inject';
 import FullReload from 'vite-plugin-full-reload';
 
-export default defineConfig(({ command }) => {
-  return {
-    define: {
-      [command === 'serve' ? 'global' : '_global']: {},
+export default defineConfig({
+  base: '/goit-js-hw-12/',
+  plugins: [
+    react(),
+    injectHTML(),
+    FullReload(['./src/**/**.html']),
+  ],
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      input: 'index.html',
     },
-    build: {
-      sourcemap: true,
-      rollupOptions: {
-        input: 'index.html',
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-          },
-        },
-      },
-      outDir: 'dist',
-      emptyOutDir: true,
-    },
-    plugins: [
-      react(),
-      injectHTML(),
-      FullReload(['./src/**/**.html']),
-    ],
-  };
+  },
 });
